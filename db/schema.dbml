@@ -1,0 +1,11 @@
+Table paste {
+  id uuid [pk]
+  paste bytea [not null]
+  iv bytea [not null]
+  signature bytea [not null]
+  password_protected bool
+  ttl int [note: null for non exiping pastes]
+  opens_limit int [note: null for unlimited]
+  current_opens int [not null, default: 0]
+  date_created datetime not null
+}
