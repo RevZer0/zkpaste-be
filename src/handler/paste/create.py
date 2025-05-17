@@ -1,11 +1,11 @@
 import binascii
 from uuid import UUID
 
-from src.handler.error import RequestHandlingError
 from sqlalchemy.orm import Session
 
 from src.api.paste.request import CreatePasteRequest
 from src.domain.paste import Paste
+from src.handler.error import RequestHandlingError
 
 from ..abstract import RequestHandler
 

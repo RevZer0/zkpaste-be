@@ -2,6 +2,7 @@ from uuid import UUID
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException
+
 from src.handler.error import RequestHandlingError
 
 from ...container import Container
