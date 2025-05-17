@@ -11,8 +11,11 @@ from src.handler.error import RequestHandlingError
 from ...container import Container
 from ...handler.abstract import RequestHandler
 from .request import CreatePasteRequest
+from .request import SignedRequest
+from .request import UpdatePasteViewsRequest
 from .response import CreatePasteResponse
 from .response import GetPasteResponse
+from .response import OKResponse
 
 router = APIRouter()
 
@@ -43,3 +46,26 @@ def get_paste(
         return GetPasteResponse.from_paste(handler.handle(paste_id))
     except RequestHandlingError:
         raise HTTPException(status_code=404, detail="NOT_FOUND_OR_EXPIRED")
+
+
+@router.put('/paste/{paste_id}/view', response_model=OKResponse)
+@inject
+def update_paste_views(
+    paste_id: UUID,
+    request: SignedRequest,
+    get_paste_handler: RequestHandler[UUID, Paste] = Depends(
+        Provide[Container.handlers.paste_get]
+    ),
+    handler: RequestHandler[UpdatePasteViewsRequest, None] = Depends(
+        Provide[Container.handlers.paste_update_view]
+    ),
+) -> OKResponse:
+    try:
+        paste = get_paste_handler.handle(paste_id)
+        update_request = UpdatePasteViewsRequest(
+            paste=paste, signature=request.signature
+        )
+        handler.handle(update_request)
+    except RequestHandlingError:
+        pass
+    return OKResponse()

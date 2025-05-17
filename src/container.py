@@ -6,9 +6,9 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 from typing import Generator
 
+from src.handler.paste.create import CreatePasteRequestHandler
 from src.handler.paste.get import GetPasteRequestHandler
-
-from .handler.paste.create import CreatePasteRequestHandler
+from src.handler.paste.update_view import UpdatePasteViewRequestHandler
 
 
 def init_session(factory: scoped_session) -> Generator:
@@ -24,6 +24,9 @@ class HandlersContainer(containers.DeclarativeContainer):
 
     paste_create = providers.Factory(CreatePasteRequestHandler, session=session)
     paste_get = providers.Factory(GetPasteRequestHandler, session=session)
+    paste_update_view = providers.Factory(
+        UpdatePasteViewRequestHandler, session=session
+    )
 
 
 class Container(containers.DeclarativeContainer):

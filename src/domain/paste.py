@@ -18,21 +18,21 @@ class Paste(Base):
     password_protected: Mapped[bool] = False
     ttl: Mapped[int | None]
     opens_limit: Mapped[int | None]
-    current_opens: Mapped[int | None]
+    current_opens: Mapped[int]
     date_created: Mapped[datetime]
-    
+
     @classmethod
     def init(
-            cls, 
-            paste: bytes, 
-            iv: bytes, 
-            signature: bytes, 
-            password_protected: bool,
-            ttl: int | None,
-            opens_limit: int | None,
+        cls,
+        paste: bytes,
+        iv: bytes,
+        signature: bytes,
+        password_protected: bool,
+        ttl: int | None,
+        opens_limit: int | None,
     ) -> Self:
         instance = cls()
-        
+
         instance.id = uuid4()
         instance.paste = paste
         instance.iv = iv
@@ -40,10 +40,8 @@ class Paste(Base):
         instance.password_protected = password_protected
         instance.ttl = ttl
         instance.opens_limit = opens_limit
-        
+
         instance.current_opens = 0
         instance.date_created = datetime.now()
 
         return instance
-
-
