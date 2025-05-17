@@ -1,0 +1,2 @@
+class RequestHandlingError(RuntimeError):
+    pass

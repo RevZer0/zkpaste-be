@@ -1,9 +1,12 @@
-from fastapi import FastAPI, Request, Response
-from src.api.paste.router import router as paste_router
+from typing import Callable
+
 from dotenv import dotenv_values
-from .container import Container
-from typing import Callable 
+from fastapi import FastAPI, Request, Response
+
+from src.api.paste.router import router as paste_router
+
 from . import api
+from .container import Container
 
 env = dotenv_values('.env')
 

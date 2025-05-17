@@ -1,9 +1,11 @@
-from dependency_injector import containers, providers
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker, Session
 from typing import Generator
 
-from .handler.paste.create import CreatePasteRequestHandler 
+from dependency_injector import containers, providers
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
+
+from .handler.paste.create import CreatePasteRequestHandler
+
 
 def init_session(factory: scoped_session) -> Generator:
     session = factory()

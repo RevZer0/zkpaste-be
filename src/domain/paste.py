@@ -1,9 +1,11 @@
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import BYTEA
-from uuid import UUID, uuid4
 from datetime import datetime
-from .base import Base
 from typing import Self
+from uuid import UUID, uuid4
+
+from sqlalchemy.orm import Mapped, mapped_column
+
+from .base import Base
+
 
 class Paste(Base):
     __tablename__ = 'paste'

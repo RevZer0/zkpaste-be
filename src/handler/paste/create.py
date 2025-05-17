@@ -1,26 +1,40 @@
-from ..abstract import RequestHandler
-from src.api.paste.request import CreatePasteRequest
-from sqlalchemy.orm import Session
+import binascii
 from uuid import UUID
+
+from src.handler.error import RequestHandlingError
+from sqlalchemy.orm import Session
+
+from src.api.paste.request import CreatePasteRequest
 from src.domain.paste import Paste
-import base64
+
+from ..abstract import RequestHandler
 
 
 class CreatePasteRequestHandler(RequestHandler):
     def __init__(self, session: Session) -> None:
         self.session = session
+        self.limits = {"iv": 12, "signature": 32, "paste": 128 * 1024}
 
     def handle(self, request: CreatePasteRequest) -> UUID:
-        paste = Paste.init(
-            base64.b64decode(request.ciphertext),
-            base64.b64decode(request.iv),
-            base64.b64decode(request.signature),
-            request.metadata.password_protected,
-            request.metadata.opens_count,
-            request.metadata.ttl
-        )
+        try:
+            paste = Paste.init(
+                binascii.a2b_base64(request.ciphertext, strict_mode=True),
+                binascii.a2b_base64(request.iv, strict_mode=True),
+                binascii.a2b_base64(request.signature, strict_mode=True),
+                request.metadata.password_protected,
+                request.metadata.opens_count,
+                request.metadata.ttl,
+            )
+        except binascii.Error:
+            raise RequestHandlingError()
+
+        if len(paste.iv) != self.limits["iv"]:
+            raise RequestHandlingError()
+
+        if len(paste.signature) != self.limits["signature"]:
+            raise RequestHandlingError()
+
         with self.session as s:
             s.add(paste)
             s.commit()
         return paste.id
-
