@@ -1,8 +1,9 @@
 from datetime import datetime
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from typing import Self
-from uuid import UUID, uuid4
-
-from sqlalchemy.orm import Mapped, mapped_column
+from uuid import UUID
+from uuid import uuid4
 
 from .base import Base
 

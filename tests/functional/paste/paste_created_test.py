@@ -1,10 +1,9 @@
 import base64
 import random
-from typing import Callable
-
 from faker import Faker
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
+from typing import Callable
 
 from src.domain.paste import Paste
 

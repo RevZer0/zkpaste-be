@@ -1,7 +1,6 @@
 import binascii
-from uuid import UUID
-
 from sqlalchemy.orm import Session
+from uuid import UUID
 
 from src.api.paste.request import CreatePasteRequest
 from src.domain.paste import Paste

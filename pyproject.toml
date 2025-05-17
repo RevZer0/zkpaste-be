@@ -1,0 +1,36 @@
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+]
+
+[tool.pyright]
+venvPath = "./venv"
+venv = "./"
+
+[tool.mypy]
+plugins = "sqlalchemy.ext.mypy.plugin"
+ignore_missing_imports = "True"
+disallow_untyped_defs = "True"
+disallow_incomplete_defs = "True"
+check_untyped_defs = "True"
+
+[tool.ruff]
+line-length = 119
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+default-section = "standard-library"
+
+[tool.black]
+skip-string-normalization = true
+
+[tool.isort]
+force_single_line = true

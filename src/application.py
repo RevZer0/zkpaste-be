@@ -1,7 +1,8 @@
-from typing import Callable
-
 from dotenv import dotenv_values
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI
+from fastapi import Request
+from fastapi import Response
+from typing import Callable
 
 from src.api.paste.router import router as paste_router
 

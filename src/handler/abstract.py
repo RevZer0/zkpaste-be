@@ -1,4 +1,5 @@
-from typing import Generic, TypeVar
+from typing import Generic
+from typing import TypeVar
 
 TRequest  = TypeVar('TRequest')
 TResponse = TypeVar('TResponse')
