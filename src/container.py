@@ -8,6 +8,7 @@ from typing import Generator
 
 from src.handler.paste.create import CreatePasteRequestHandler
 from src.handler.paste.delete import DeletePasteRequestHandler
+from src.handler.paste.delete_expired import DeleteExpiredPasteRequestHandler
 from src.handler.paste.get import GetPasteRequestHandler
 from src.handler.paste.update_view import UpdatePasteViewRequestHandler
 
@@ -30,6 +31,9 @@ class HandlersContainer(containers.DeclarativeContainer):
     )
     paste_delete = providers.Factory(
         DeletePasteRequestHandler, session=session
+    )
+    paste_delete_expired = providers.Factory(
+        DeleteExpiredPasteRequestHandler, session=session
     )
 
 
