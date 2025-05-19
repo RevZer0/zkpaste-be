@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from typing import Generator
 
 from src.handler.paste.create import CreatePasteRequestHandler
+from src.handler.paste.delete import DeletePasteRequestHandler
 from src.handler.paste.get import GetPasteRequestHandler
 from src.handler.paste.update_view import UpdatePasteViewRequestHandler
 
@@ -26,6 +27,9 @@ class HandlersContainer(containers.DeclarativeContainer):
     paste_get = providers.Factory(GetPasteRequestHandler, session=session)
     paste_update_view = providers.Factory(
         UpdatePasteViewRequestHandler, session=session
+    )
+    paste_delete = providers.Factory(
+        DeletePasteRequestHandler, session=session
     )
 
 

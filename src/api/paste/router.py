@@ -11,6 +11,7 @@ from src.handler.error import RequestHandlingError
 from ...container import Container
 from ...handler.abstract import RequestHandler
 from .request import CreatePasteRequest
+from .request import DeletePasteRequest
 from .request import SignedRequest
 from .request import UpdatePasteViewsRequest
 from .response import CreatePasteResponse
@@ -66,6 +67,25 @@ def update_paste_views(
             paste=paste, signature=request.signature
         )
         handler.handle(update_request)
+    except RequestHandlingError:
+        pass
+    return OKResponse()
+
+@router.post('/paste/{paste_id}/delete', response_model=OKResponse)
+@inject
+def delete_paste(
+    paste_id: UUID, 
+    request: SignedRequest,
+    get_paste_handler: RequestHandler[UUID, Paste] = Depends(
+        Provide[Container.handlers.paste_get]
+    ),
+    handler: RequestHandler[DeletePasteRequest, None] = Depends(
+        Provide[Container.handlers.paste_delete]
+    )
+) -> OKResponse:
+    try:
+        paste = get_paste_handler.handle(paste_id)
+        handler.handle(DeletePasteRequest(paste=paste, signature=request.signature))
     except RequestHandlingError:
         pass
     return OKResponse()

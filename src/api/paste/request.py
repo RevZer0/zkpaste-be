@@ -27,3 +27,9 @@ class UpdatePasteViewsRequest(BaseModel):
 
     paste: Paste
     signature: str
+
+class DeletePasteRequest(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    paste: Paste
+    signature: str

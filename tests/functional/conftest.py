@@ -59,5 +59,10 @@ def persisted_paste_factory(
 
     with session_factory() as s:
         s.add_all(created_instances)
-        [s.delete(i) for i in created_instances]
+        for i in created_instances:
+            try:
+                s.refresh(i)
+                s.delete(i)
+            except Exception:
+                pass
         s.commit()
