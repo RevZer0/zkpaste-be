@@ -32,7 +32,7 @@ def test_create_paste(
         assert len(paste.iv) == 12
         assert len(paste.signature) == 32
         assert paste.password_protected is False
-        assert paste.ttl is None
+        assert paste.ttl == 86400
         assert paste.opens_limit is None
         assert paste.current_opens == 0
         assert paste.date_created is not None

@@ -13,6 +13,7 @@ class CreatePasteRequestHandler(RequestHandler):
     def __init__(self, session: Session) -> None:
         self.session = session
         self.limits = {"iv": 12, "signature": 32, "paste": 128 * 1024}
+        self.defaults = {"ttl": 86400}
 
     def handle(self, request: CreatePasteRequest) -> UUID:
         try:
@@ -21,8 +22,8 @@ class CreatePasteRequestHandler(RequestHandler):
                 binascii.a2b_base64(request.iv, strict_mode=True),
                 binascii.a2b_base64(request.signature, strict_mode=True),
                 request.metadata.password_protected,
-                request.metadata.opens_count,
-                request.metadata.ttl,
+                request.metadata.ttl if request.metadata.ttl else self.defaults["ttl"],
+                request.metadata.opens_count
             )
         except binascii.Error:
             raise RequestHandlingError()
