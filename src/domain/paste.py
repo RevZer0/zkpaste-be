@@ -15,7 +15,7 @@ class Paste(Base):
     paste: Mapped[bytes]
     iv: Mapped[bytes]
     signature: Mapped[bytes]
-    password_protected: Mapped[bool] = False
+    password_protected: Mapped[bool]
     ttl: Mapped[int | None]
     opens_limit: Mapped[int | None]
     current_opens: Mapped[int]
@@ -40,7 +40,6 @@ class Paste(Base):
         instance.password_protected = password_protected
         instance.ttl = ttl
         instance.opens_limit = opens_limit
-
         instance.current_opens = 0
         instance.date_created = datetime.now()
 

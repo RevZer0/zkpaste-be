@@ -40,6 +40,32 @@ def test_create_paste(
         s.delete(paste)
         s.commit()
 
+def test_create_paste_protected_with_password(
+    api_client: TestClient, faker: Faker, session_factory: Callable[..., Session]
+) -> None:
+    payload = {
+        "ciphertext": base64.b64encode(faker.paragraph().encode()).decode(),
+        "iv": base64.b64encode(random.randbytes(12)).decode(),
+        "signature": base64.b64encode(random.randbytes(32)).decode(),
+        "metadata": {
+            "password_protected": True
+        },
+    }
+
+    response = api_client.post(
+        "/paste", json=payload, headers={"Content-type": "application/json"}
+    )
+    assert response.status_code == 200
+    assert "paste_id" in response.json()
+
+    with session_factory() as s:
+        paste = s.get(Paste, response.json()["paste_id"])
+        assert paste is not None
+
+        assert paste.password_protected is True
+
+        s.delete(paste)
+        s.commit()
 
 def test_invalid_base64_data(api_client: TestClient, faker: Faker) -> None:
     payload = {
