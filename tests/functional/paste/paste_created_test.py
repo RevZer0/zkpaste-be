@@ -107,3 +107,19 @@ def test_invalid_signature_len(api_client: TestClient, faker: Faker) -> None:
         "/paste", json=payload, headers={"Content-type": "application/json"}
     )
     assert response.status_code == 409
+
+
+def test_invalid_ttl(api_client: TestClient, faker: Faker) -> None:
+    payload = {
+        "ciphertext": base64.b64encode(faker.paragraph().encode()).decode(),
+        "iv": base64.b64encode(random.randbytes(12)).decode(),
+        "signature": base64.b64encode(random.randbytes(32)).decode(),
+        "metadata": {
+            'ttl': 566
+        },
+    }
+
+    response = api_client.post(
+        "/paste", json=payload, headers={"Content-type": "application/json"}
+    )
+    assert response.status_code == 409
