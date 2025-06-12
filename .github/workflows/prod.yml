@@ -25,8 +25,8 @@ jobs:
           ${{ secrets.ENV }}
           EOF
           rm -rf ${{ vars.DEPLOYMENT_PATH }}/.venv
-          python3 -m venv ${{ secrets.DEPLOYMENT_PATH }}/venv
+          python3 -m venv ${{ vars.DEPLOYMENT_PATH }}/venv
           
-          ${{ secrets.DEPLOYMENT_PATH }}/venv/bin/pip install -r ${{ secrets.DEPLOYMENT_PATH }}/requirements.txt
-          ${{ secrets.DEPLOYMENT_PATH }}/venv/bin/alembic upgrade head          
-          sudo /bin/systemctl restart racedatabase.service"
+          ${{ vars.DEPLOYMENT_PATH }}/venv/bin/pip install -r ${{ vars.DEPLOYMENT_PATH }}/requirements.txt
+          ${{ vars.DEPLOYMENT_PATH }}/venv/bin/alembic upgrade head          
+          sudo /bin/systemctl restart zkpaste-core.service"
