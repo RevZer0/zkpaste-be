@@ -1,0 +1,32 @@
+name: Deploy to the PRODUCTION
+on:
+  release:
+    types: [ 'published' ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: PRODUCTION
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload application and restart related service
+        run: |
+          eval $(ssh-agent -s)
+          echo "${{ secrets.KEY }}" | tr -d '\r' | ssh-add -
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          rsync -a --chmod=D2775,F664 --exclude=.git* --exclude=tests --exclude=var --exclude=README.md "$GITHUB_WORKSPACE"/ ${{ secrets.USER }}@${{ secrets.HOST }}:${{ vars.DEPLOYMENT_PATH }}
+          ssh ${{ secrets.USER }}@${{ secrets.HOST }} "
+          cd ${{ vars.DEPLOYMENT_PATH }}
+          cat << EOF > ./.env
+          ${{ secrets.ENV }}
+          EOF
+          rm -rf ${{ vars.DEPLOYMENT_PATH }}/.venv
+          python3.13 -m venv ${{ secrets.DEPLOYMENT_PATH }}/venv
+          
+          ${{ secrets.DEPLOYMENT_PATH }}/venv/bin/pip install -r ${{ secrets.DEPLOYMENT_PATH }}/requirements.txt
+          ${{ secrets.DEPLOYMENT_PATH }}/venv/bin/alembic upgrade head          
+          sudo /bin/systemctl restart racedatabase.service"
