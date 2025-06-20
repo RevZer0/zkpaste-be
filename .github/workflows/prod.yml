@@ -24,7 +24,7 @@ jobs:
           cat << EOF > ./.env
           ${{ secrets.ENV }}
           EOF
-          rm -rf ${{ vars.DEPLOYMENT_PATH }}/.venv
+          rm -rf ${{ vars.DEPLOYMENT_PATH }}/venv
           python3 -m venv ${{ vars.DEPLOYMENT_PATH }}/venv
           
           ${{ vars.DEPLOYMENT_PATH }}/venv/bin/pip install -r ${{ vars.DEPLOYMENT_PATH }}/requirements.txt
