@@ -9,8 +9,9 @@ from src.api.paste.router import router as paste_router
 
 from . import api
 from .container import Container
+from pathlib import Path
 
-env = dotenv_values('.env')
+env = dotenv_values((Path(__file__).parent / '../.env').resolve())
 
 container = Container()
 application = FastAPI()
